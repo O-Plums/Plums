@@ -1,52 +1,48 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native'
+import { Router, Scene, Stack } from 'react-native-router-flux'
+import { AppLoading, Font } from 'expo'
+import { Provider } from '@ant-design/react-native'
 
-import { AppLoading, Font } from 'expo';
 
-import Home from './Views/Home/index.js'
+import Home from './src/views/Home/index.js'
+import Conversation from './src/views/Conversation/index.js'
 
 export default class App extends React.Component {
 
   state = {
-     theme: null,
-     currentTheme: null,
-     isReady: false,
-   };
+    isReady: false,
+  };
 
   async componentDidMount() {
-  await Font.loadAsync(
-    'antoutline',
-    // eslint-disable-next-line
-    require('@ant-design/icons-react-native/fonts/antoutline.ttf')
-  );
+    await Font.loadAsync(
+      'antoutline',
+      // eslint-disable-next-line
+      require('@ant-design/icons-react-native/fonts/antoutline.ttf')
+    );
 
-  await Font.loadAsync(
-    'antfill',
+    await Font.loadAsync(
+      'antfill',
+      // eslint-disable-next-line
+      require('@ant-design/icons-react-native/fonts/antfill.ttf')
+    );
     // eslint-disable-next-line
-    require('@ant-design/icons-react-native/fonts/antfill.ttf')
-  );
-  // eslint-disable-next-line
-  this.setState({ isReady: true });
-}
+    this.setState({ isReady: true });
+  }
 
   render() {
     if (!this.state.isReady) {
-   return <AppLoading />;
- }
+      return <AppLoading />;
+    }
 
     return (
-      <View style={styles.container}>
-      <Home />
-      </View>
-    );
+       <Provider>
+      <Router>
+        <Stack key="root">
+          <Scene key="home" component={Home} title="Home"/>
+          <Scene key="conversation" component={Conversation} title="Conversation"/>
+        </Stack>
+      </Router>
+       </Provider>
+    )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
