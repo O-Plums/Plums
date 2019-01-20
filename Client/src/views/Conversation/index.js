@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, KeyboardAvoidingView } from 'react-native'
 import { Button, InputItem, Radio, Icon, Flex, WhiteSpace } from '@ant-design/react-native'
 
 import { Actions } from 'react-native-router-flux'
@@ -32,8 +32,9 @@ export default class Conversation extends React.Component {
   render () {
     const { tmpMsg, currentId } = this.state
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding">
         <View>
+        { /* THis need to be a components  need to add date and name */ }
           {tmpMsg && tmpMsg.length > 0 && (
             tmpMsg.map((obj, key) => {
               return (
@@ -44,24 +45,21 @@ export default class Conversation extends React.Component {
             })
           )}
         </View>
+        {/* This need to be a components */}
         <Flex direction='row' style={{ marginBottom: 20, width: '100%', padding: 5 }}>
           <Flex.Item >
             <InputItem
               clear
               value={this.state.msg}
-              onChange={value => {
-                this.setState({
-                  msg: value,
-                })
-              }}
+              onChange={value => { this.setState({ msg: value }) }}
               placeholder='new message'
             />
           </Flex.Item>
           <Button type='primary' onPress={this.sendNewMessage} >Send</Button>
 
         </Flex>
-
-      </View>
+      <View style={{ height: 60 }} />
+      </KeyboardAvoidingView>
     )
   }
 }
