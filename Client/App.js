@@ -1,48 +1,34 @@
-import React from 'react';
-import { Router, Scene, Stack } from 'react-native-router-flux'
-import { AppLoading, Font } from 'expo'
-import { Provider } from '@ant-design/react-native'
+import React, { Component } from 'react'
+import { createStore, applyMiddleware, combineReducers } from 'redux'
+import { Provider } from 'react-redux'
+// TODO => middleware can be relly good for WS
+// import simpleMiddleWare from './src/middleware/index.js'
+import thunk from 'redux-thunk'
+import reducer from './src/reducers'
 
+import App from './src/app.js'
 
-import Home from './src/views/Home/index.js'
-import Conversation from './src/views/Conversation/index.js'
+const configureStore = (reducer) => createStore(
+  combineReducers({
+    user: reducer.user,
+  }),
+  applyMiddleware(
+   // simpleMiddleWare(),
+   thunk
+ ),
 
-export default class App extends React.Component {
+)
 
-  state = {
-    isReady: false,
-  };
+const store =  configureStore(reducer)
 
-  async componentDidMount() {
-    await Font.loadAsync(
-      'antoutline',
-      // eslint-disable-next-line
-      require('@ant-design/icons-react-native/fonts/antoutline.ttf')
-    );
-
-    await Font.loadAsync(
-      'antfill',
-      // eslint-disable-next-line
-      require('@ant-design/icons-react-native/fonts/antfill.ttf')
-    );
-    // eslint-disable-next-line
-    this.setState({ isReady: true });
-  }
+class Plums extends Component {
 
   render() {
-    if (!this.state.isReady) {
-      return <AppLoading />;
-    }
-
     return (
-       <Provider>
-      <Router>
-        <Stack key="root">
-          <Scene key="home" component={Home} title="Home"/>
-          <Scene key="conversation" component={Conversation} title="Conversation"/>
-        </Stack>
-      </Router>
-       </Provider>
-    )
+      <Provider store={store}>
+        <App />
+      </Provider>
+    );
   }
 }
+export default Plums

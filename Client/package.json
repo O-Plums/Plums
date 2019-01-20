@@ -1,18 +1,57 @@
 {
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
+    "lint": "eslint --fix src",
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "eject": "expo eject"
   },
+  "eslintConfig": {
+    "plugins": [
+      "security"
+    ],
+    "extends": [
+      "react",
+      "zavatta",
+      "plugin:security/recommended"
+    ],
+    "rules": {
+      "no-sync": 0,
+      "no-undef": 0,
+      "id-length": 0,
+      "camelcase": 0,
+      "no-inline-comments": 0,
+      "max-nested-callbacks": 0,
+      "max-statements-per-line": 0,
+      "no-class-assign": 0,
+      "no-global-assign": 0,
+      "no-native-reassign": 0,
+      "react/forbid-prop-types": 0,
+      "no-mixed-operators": 0,
+      "react/prop-types": 0,
+      "max-params": 0,
+      "no-useless-escape": 0,
+      "security/detect-object-injection": 0,
+      "security/detect-non-literal-fs-filename": 0
+    }
+  },
   "dependencies": {
     "@ant-design/react-native": "^3.0.6",
     "antd-mobile": "^2.2.8",
+    "eslint": "^4.7.2",
+    "eslint-config-react": "^1.1.7",
+    "eslint-config-zavatta": "^6.0.1",
+    "eslint-plugin-react": "^7.4.0",
+    "eslint-plugin-security": "^1.4.0",
     "expo": "^32.0.0",
+    "immutable": "^4.0.0-rc.12",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
-    "react-native-router-flux": "^4.0.6"
+    "react-native-router-flux": "^4.0.6",
+    "react-redux": "^6.0.0",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0"
