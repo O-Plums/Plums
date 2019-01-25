@@ -2,8 +2,10 @@ import React from 'react'
 import { Router, Scene, Stack } from 'react-native-router-flux'
 import { AppLoading, Font } from 'expo'
 import { Provider } from '@ant-design/react-native'
-import Home from './views/Home/index.js'
-import Conversation from './views/Conversation/index.js'
+import Home from './components/Home/index.js'
+import Conversation from './components/Conversation/index.js'
+import Preferences from './components/Preferences/index.js'
+import Wall from './components/Wall/index.js'
 
 export default class App extends React.Component {
 
@@ -38,6 +40,8 @@ export default class App extends React.Component {
           <Stack key='root'>
             <Scene key='home' component={Home} title='Home'/>
             <Scene key='conversation' component={Conversation} title='Conversation'/>
+            <Scene key='preferences' component={Preferences} title='Preferences'/>
+            <Scene key='wall' component={Wall} title='Wall'/>
           </Stack>
         </Router>
       </Provider>
