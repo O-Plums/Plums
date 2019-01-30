@@ -1,4 +1,0 @@
-CREATE TABLE rooms (
-    id SERIAL PRIMARY KEY,
-    subject TEXT NOT NULL
-)
