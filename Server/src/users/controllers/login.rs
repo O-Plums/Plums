@@ -14,12 +14,9 @@ pub struct Login {
 impl Login {
     pub fn post((data, request) : (Json<New>, HttpRequest<State>)) -> FutureResponse {
         let query = &data;
-        println!("TA MERE {:?}", query);
         let find = Find{ phone_code: data.phone_code.clone(), phone: data.phone.clone()};
-        println!("ICI");
         request.state().db.send(find).from_err().and_then(move | res | match res {
             Ok(option_user) => {
-                println!("LA");
                 println!("{:?}", &option_user);
                 match option_user {
                     Some(user) => {
