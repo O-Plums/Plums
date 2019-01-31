@@ -17,16 +17,19 @@ impl Login {
         let find = Find{ phone_code: data.phone_code.clone(), phone: data.phone.clone()};
         request.state().db.send(find).from_err().and_then(move | res | match res {
             Ok(option_user) => {
-                println!("{:?}", &option_user);
                 match option_user {
                     Some(user) => {
-                        println!("{:?}", &user);
                         if user.validation_code == data.validation_code {
-                            Ok(HttpResponse::Ok().json(user))
+                            let mut modif = user.to_update();
+                            modif.validation_code = 0;
+                            match request.state().db.send(modif).wait() {
+                                Ok(u) => Ok(HttpResponse::Ok().json(u.unwrap())),
+                                Err(_) => Ok(HttpResponse::BadRequest().json("Update user fail".to_string()))
+                            }
                         } else {
-                            Ok(HttpResponse::Ok().json(user))
+                            Ok(HttpResponse::BadRequest().json("fail validation user".to_string()))
                         }
-                    }
+                    },
                     None => Ok(HttpResponse::BadRequest().json("user not found".to_string()))
                 }
             },

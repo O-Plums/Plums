@@ -18,6 +18,7 @@ use actix_web::{server, App, middleware};
 
 pub mod schema;
 pub mod users;
+pub mod rooms;
 pub mod utils;
 
 pub struct State {
