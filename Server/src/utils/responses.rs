@@ -1,4 +1,4 @@
-use futures::future::{Future, result};
-use actix_web::{HttpResponse, Error, AsyncResponder};
+use futures::future::{ Future };
+use actix_web::{ HttpResponse, Error };
 
 pub type FutureResponse = Box<Future<Item = HttpResponse, Error = Error>>;

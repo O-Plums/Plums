@@ -27,7 +27,7 @@ table! {
     topics (id) {
         id -> Int4,
         name -> Nullable<Varchar>,
-        theme -> Nullable<Int4>,
+        theme_id -> Nullable<Int4>,
         created_at -> Timestamp,
     }
 }
@@ -46,7 +46,7 @@ table! {
 }
 
 joinable!(messages -> users (user_id));
-joinable!(topics -> themes (theme));
+joinable!(topics -> themes (theme_id));
 joinable!(users -> rooms (room_id));
 
 allow_tables_to_appear_in_same_query!(
