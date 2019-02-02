@@ -109,7 +109,7 @@ impl Handler<ClientMessage> for ChatServer {
     type Result = ();
 
     fn handle(&mut self, msg: ClientMessage, _: &mut Context<Self>) {
-        self.send_message(&msg.room_id, msg.content.as_str(), msg.id)
+        self.send_message(&msg.room_id.to_string(), msg.content.as_str(), msg.id)
     }
 }
 

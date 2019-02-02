@@ -4,7 +4,7 @@ use std::time::{ Instant, Duration };
 use rand::{ self, rngs::ThreadRng };
 use std::collections::{ HashMap, HashSet };
 
-use crate::State;
+use crate::{ State, Wsstate };
 use crate::chat::model::*;
 use crate::chat::model::{ Message as ChatMessage };
 
@@ -42,9 +42,8 @@ impl Actor for Ws {
     fn started(&mut self, ctx: &mut Self::Context) {
         self.hb(ctx);
         let addr = ctx.address();
-        ctx.state()
-            .ws
-            .addr
+        let Wsstate(ws) = ctx.state().ws;
+            ws
             .send(Connect { addr: addr.recipient() })
             .into_actor(self)
             .then(|res, act, ctx| {
@@ -57,7 +56,8 @@ impl Actor for Ws {
     }
 
     fn stopping(&mut self, ctx: &mut Self::Context) -> Running {
-        ctx.state().addr.do_send(Disconnect{ id: self.id });
+        let Wsstate(ws) = ctx.state().ws;
+        ws.do_send(Disconnect{ id: self.id });
         Running::Stop
     }
 
@@ -74,7 +74,8 @@ impl Handler<ChatMessage> for Ws {
 impl StreamHandler<ws::Message, ws::ProtocolError> for Ws {
     fn handle(&mut self, msg: ws::Message, ctx: &mut Self::Context) {
         println!("WEBSOCKET MESSAGE: {:?}", msg);
-        let State(ctx) = ctx;
+        let Wsstate(ctx) = ctx.state().ws;
+        // let State(ctx) = ctx;
         match msg {
             ws::Message::Ping(msg) => {
                 self.hb = Instant::now();
@@ -141,10 +142,8 @@ impl Ws {
         ctx.run_interval(HEARTBEAT_INTERVAL, |act, ctx| {
             if Instant::now().duration_since(act.hb) > CLIENT_TIMEOUT {
                 println!("Websocket Client heartbeat failed, disconnecting !");
-
-                ctx.state()
-                    .addr
-                    .do_send(Disconnect { id: act.id});
+                let Wsstate(ws) = ctx.state().ws;
+                    ws.do_send(Disconnect { id: act.id});
                 ctx.stop();
                 return;
             }
